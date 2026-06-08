@@ -1,0 +1,1 @@
+add_executable(00_telescoping_constructor main.cc)

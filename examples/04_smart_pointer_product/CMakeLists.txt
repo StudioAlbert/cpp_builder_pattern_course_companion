@@ -1,0 +1,1 @@
+add_executable(04_smart_pointer_product main.cc)
