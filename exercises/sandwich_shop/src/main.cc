@@ -11,7 +11,8 @@ int main() {
   // TODO (see ../README.md): refactor Sandwich behind a SandwichBuilder, then
   // rebuild this BLT with a fluent, named API, e.g.:
   //
-  //   Sandwich blt = SandwichBuilder{"baguette"}
+  //   Sandwich blt = SandwichBuilder{}
+  //                      .WithBread("baguette")
   //                      .WithFilling("bacon")
   //                      .AddSauce("mayo")
   //                      .WithCheese()

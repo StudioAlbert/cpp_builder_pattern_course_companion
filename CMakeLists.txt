@@ -12,5 +12,6 @@ add_subdirectory(examples/02_fluent_chaining)
 add_subdirectory(examples/03_smart_pointer_product)
 add_subdirectory(examples/04_private_ctor)
 
-# Exercise: starter + mirrored solution.
+# Exercise: two sibling projects - the starter and the completed solution.
 add_subdirectory(exercises/sandwich_shop)
+add_subdirectory(exercises/sandwich_shop_solution)

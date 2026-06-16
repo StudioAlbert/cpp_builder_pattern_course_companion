@@ -2,13 +2,16 @@
 #define SANDWICH_SHOP_SOLUTION_SANDWICH_H_
 
 #include <sstream>
+#include <stdexcept>
 #include <string>
-#include <utility>
+#include <string_view>
 #include <vector>
 
-// SOLUTION - Sandwich is now built only through SandwichBuilder.
-class SandwichBuilder;  // forward declaration
-
+// SOLUTION - Sandwich is built only through SandwichBuilder.
+//
+// Embedded-product + friend design: the builder holds the Sandwich it is
+// assembling and writes its private fields directly; Build() validates once and
+// returns it.
 class Sandwich {
  public:
   std::string Content() const {
@@ -22,7 +25,7 @@ class Sandwich {
   }
 
  private:
-  // Step 5: private constructor - the builder is the only path.
+  // Step 5: private default constructor - the builder is the only path.
   Sandwich() = default;
   friend class SandwichBuilder;
 
@@ -36,17 +39,17 @@ class Sandwich {
 
 class SandwichBuilder {
  public:
-  explicit SandwichBuilder(std::string bread) {
-    sandwich_.bread_ = std::move(bread);
-  }
-
-  // Steps 3 + 4: chained mutators grouped by topic.
-  SandwichBuilder& WithFilling(std::string filling) {
-    sandwich_.filling_ = std::move(filling);
+  // Steps 1 + 4: named mutators write into the embedded product, chained.
+  SandwichBuilder& WithBread(std::string_view bread) {
+    sandwich_.bread_ = bread;
     return *this;
   }
-  SandwichBuilder& AddSauce(std::string sauce) {
-    sandwich_.sauces_.push_back(std::move(sauce));
+  SandwichBuilder& WithFilling(std::string_view filling) {
+    sandwich_.filling_ = filling;
+    return *this;
+  }
+  SandwichBuilder& AddSauce(std::string_view sauce) {
+    sandwich_.sauces_.emplace_back(sauce);
     return *this;
   }
   SandwichBuilder& WithCheese(bool cheese = true) {
@@ -62,12 +65,17 @@ class SandwichBuilder {
     return *this;
   }
 
-  // Step 2: build() returns the product (validate invariants here if needed).
-  Sandwich Build() const { return sandwich_; }
+  // Steps 2 + 3: build() returns the product and is the single place to validate.
+  Sandwich Build() const {
+    if (sandwich_.bread_.empty())
+      throw std::invalid_argument("bread is required");
+    return sandwich_;
+  }
 
   // Step 6: encapsulate recurring recipes (the Director role).
   static Sandwich Blt() {
-    return SandwichBuilder{"baguette"}
+    return SandwichBuilder{}
+        .WithBread("baguette")
         .WithFilling("bacon")
         .AddSauce("mayo")
         .WithCheese()
@@ -75,7 +83,8 @@ class SandwichBuilder {
         .Build();
   }
   static Sandwich Vegan() {
-    return SandwichBuilder{"wholewheat"}
+    return SandwichBuilder{}
+        .WithBread("wholewheat")
         .WithFilling("falafel")
         .AddSauce("hummus")
         .AddSauce("harissa")
@@ -83,7 +92,7 @@ class SandwichBuilder {
   }
 
  private:
-  Sandwich sandwich_;
+  Sandwich sandwich_;  // the product in progress
 };
 
 #endif  // SANDWICH_SHOP_SOLUTION_SANDWICH_H_

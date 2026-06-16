@@ -37,7 +37,7 @@ cmake --build build
 
 # run any example, e.g.:
 ./build/examples/02_fluent_chaining/02_fluent_chaining
-./build/exercises/sandwich_shop/sandwich_shop_solution
+./build/exercises/sandwich_shop_solution/sandwich_shop_solution
 ```
 
 ## Examples
@@ -57,5 +57,5 @@ in six steps. See its [README](exercises/sandwich_shop/README.md).
 
 - **`main`** branch: the starting point (telescoping constructor only).
 - **`solution/sandwich-shop`** branch: the completed refactor. For convenience
-  it is also mirrored under `exercises/sandwich_shop/solution/`, whose
-  `main.cc` asserts the expected `Content()` output.
+  it is also mirrored as the sibling project `exercises/sandwich_shop_solution/`,
+  whose `src/main.cc` asserts the expected `Content()` output.

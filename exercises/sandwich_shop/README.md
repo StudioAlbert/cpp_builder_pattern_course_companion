@@ -18,23 +18,42 @@ cmake -S ../../.. -B build && cmake --build build
 
 ## Your task
 
-1. **Accessors** — replace the telescoping constructor with named setters;
-   verify with `Content()`.
-2. **`Build()`** — add a method that returns the finished `Sandwich` (and is
-   the single place to validate, e.g. bread must not be empty).
-3. **`SandwichBuilder`** — extract a dedicated builder class holding the
-   mutators.
-4. **Chaining** — make each mutator return `*this`, grouped by topic
-   (`box` / takeaway, `bread`, `filling`, `sauces`, `cheese`, `toasted`).
-5. **Private constructor** — make `Sandwich`'s constructor private and the
-   builder a `friend`, so the builder is the only path to a `Sandwich`.
-6. **Director recipes** — encapsulate recurring builds behind public methods,
-   e.g. `SandwichBuilder::Blt()` and `SandwichBuilder::Vegan()`.
+1. **A builder that writes into the product** — declare
+   `friend class SandwichBuilder;` in `Sandwich`, then create a
+   `SandwichBuilder` that *holds* the sandwich it is assembling
+   (`Sandwich sandwich_;`). Give it named mutators (`WithBread`, `WithFilling`,
+   `AddSauce`, `WithCheese`, `Toasted`, `Takeaway`) that write straight into
+   `sandwich_`'s private fields. Assemble the BLT through these named calls
+   instead of the telescoping constructor; verify with `Content()`.
+2. **`Build()` returns the product** — add `Sandwich Build()` that returns the
+   embedded `sandwich_`. The call site now gets its `Sandwich` from the builder.
+3. **Validate in `Build()`** — make `Build()` the single place that checks
+   invariants: throw `std::invalid_argument` if `bread` is empty. Confirm a
+   builder with no bread is rejected.
+4. **Chaining** — make each mutator `return *this;`, so the whole sandwich is
+   configured in one fluent expression.
+5. **Lock the only path** — give `Sandwich` a **private default constructor**
+   (`Sandwich() = default;`). Because the builder is a `friend`, it stays the
+   only way to create *any* `Sandwich` — even `Sandwich s;` won't compile.
+6. **Director recipes** — encapsulate recurring builds behind static factory
+   methods, each returning a ready-to-serve `Sandwich` by driving the fluent
+   API. Implement at least:
+   - `SandwichBuilder::Blt()` → bread `baguette`, filling `bacon`, sauce
+     `mayo`, with cheese, toasted
+     → `"toasted baguette sandwich with bacon + cheese, mayo (eat in)"`
+   - `SandwichBuilder::Vegan()` → bread `wholewheat`, filling `falafel`,
+     sauces `hummus` + `harissa`
+     → `"wholewheat sandwich with falafel, hummus, harissa (eat in)"`
+
+   A recipe is *just* a chain of mutators ending in `Build()` — that is the
+   Director role. Bonus: add one of your own, e.g. a takeaway variant
+   `ClubToGo()` reusing `.AddSauce(...)`, `.WithCheese()`, `.Takeaway()`.
 
 ## Target call site
 
 ```cpp
-Sandwich blt = SandwichBuilder{"baguette"}
+Sandwich blt = SandwichBuilder{}
+                   .WithBread("baguette")
                    .WithFilling("bacon")
                    .AddSauce("mayo")
                    .WithCheese()
@@ -45,6 +64,7 @@ Sandwich blt = SandwichBuilder{"baguette"}
 ## Solution
 
 The completed solution lives on the **`solution/sandwich-shop`** branch.
-It is also mirrored here under [`solution/`](solution/) for convenience
-(`solution/sandwich.h` + `solution/main.cc`, the latter asserting the
-expected `Content()` strings).
+It is also mirrored as a sibling project
+[`../sandwich_shop_solution/`](../sandwich_shop_solution/) for convenience
+(`include/sandwich.h` + `src/main.cc`, the latter asserting the expected
+`Content()` strings).
