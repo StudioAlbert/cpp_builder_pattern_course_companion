@@ -1,4 +1,4 @@
-// 02 - build() returns the product, and is the single place to validate.
+// 01 - build() returns the product, and is the single place to validate.
 //
 // An object only comes to life inside Build(), so that is the one place to
 // check invariants. While no Build() has succeeded, you hold a *builder*,
@@ -7,6 +7,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <string_view>
 
 class Person {
   friend class PersonBuilder;

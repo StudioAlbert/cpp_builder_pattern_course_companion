@@ -1,4 +1,4 @@
-# CPlusPlus_Course_Builder
+# cpp_builder_pattern_course_companion
 
 Companion code for the **C++ Builder** lecture (SAE Geneve, C++ Advanced).
 Each example is a small, self-contained program; the folder name matches the
@@ -36,7 +36,7 @@ cmake -S . -B build
 cmake --build build
 
 # run any example, e.g.:
-./build/examples/03_fluent_chaining/03_fluent_chaining
+./build/examples/02_fluent_chaining/02_fluent_chaining
 ./build/exercises/sandwich_shop/sandwich_shop_solution
 ```
 
@@ -45,16 +45,15 @@ cmake --build build
 | Folder | Lecture module | Shows |
 |---|---|---|
 | `examples/00_telescoping_constructor` | 1 | the problem: anonymous args, silent swap bug |
-| `examples/01_builder_setters` | 3 | a dedicated builder with named (void) setters |
-| `examples/02_build_returns_product` | 4 | `build()` returns the product **and** validates |
-| `examples/03_fluent_chaining` | 5 | mutators return `*this` → fluent API |
-| `examples/04_smart_pointer_product` | 6 | `build()` → `unique_ptr` for a polymorphic product |
-| `examples/05_private_ctor` | 6 | private ctor + `friend` → builder is the only path |
+| `examples/01_build_returns_product` | 3–4 | private fields + `friend` builder holding the product; `With*` mutators write into it; `build()` returns it **and** validates |
+| `examples/02_fluent_chaining` | 5 | mutators return `*this` → fluent API |
+| `examples/03_smart_pointer_product` | 6 | `build()` → `unique_ptr` for a polymorphic product (the one case that does *not* embed-by-value) |
+| `examples/04_private_ctor` | 6 | private (default) ctor + `friend` → builder is the only path |
 
 ## Exercise
 
 `exercises/sandwich_shop/` — refactor a telescoping `Sandwich` into a Builder
-in six steps. See its [README](C++%20Advanced/companions/CPlusPlus_Course_Builder/exercises/sandwich_shop/README.md).
+in six steps. See its [README](exercises/sandwich_shop/README.md).
 
 - **`main`** branch: the starting point (telescoping constructor only).
 - **`solution/sandwich-shop`** branch: the completed refactor. For convenience

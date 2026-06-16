@@ -1,8 +1,13 @@
-// 04 - When the product is polymorphic or heap-owned, build() can return a
+// 03 - When the product is polymorphic or heap-owned, build() can return a
 // smart pointer.
 //
 // Prefer returning by value (RVO copies nothing). The unique_ptr is justified
 // only when the caller must OWN a polymorphic object - not to do a free `new`.
+//
+// This is the deliberate exception to the embedded-product + friend design of
+// the other examples: the builder canNOT hold a `Person product_` and copy it
+// out, because that would slice the Character. So it keeps parallel fields and
+// constructs the concrete type with make_unique.
 
 #include <iostream>
 #include <memory>

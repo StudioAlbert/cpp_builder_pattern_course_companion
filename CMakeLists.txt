@@ -7,10 +7,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # One standalone executable per example folder (folder name == slide title).
 add_subdirectory(examples/00_telescoping_constructor)
-add_subdirectory(examples/02_build_returns_product)
-add_subdirectory(examples/03_fluent_chaining)
-add_subdirectory(examples/04_smart_pointer_product)
-add_subdirectory(examples/05_private_ctor)
+add_subdirectory(examples/01_build_returns_product)
+add_subdirectory(examples/02_fluent_chaining)
+add_subdirectory(examples/03_smart_pointer_product)
+add_subdirectory(examples/04_private_ctor)
 
 # Exercise: starter + mirrored solution.
 add_subdirectory(exercises/sandwich_shop)

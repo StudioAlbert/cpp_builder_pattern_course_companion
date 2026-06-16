@@ -1,0 +1,1 @@
+add_executable(01_build_returns_product main.cc)
