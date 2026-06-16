@@ -7,53 +7,48 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
-#include <utility>
 
 class Person {
+  friend class PersonBuilder;
  public:
-  Person(std::string name, int age, std::string email)
-      : name_(std::move(name)), age_(age), email_(std::move(email)) {}
-
   void Print() const {
     std::cout << name_ << " (" << age_ << ") <" << email_ << ">\n";
   }
 
  private:
   std::string name_;
-  int age_;
+  int age_ = 0;            // defaults make every optional field truly optional
   std::string email_;
+  bool premium_ = false;
 };
 
 class PersonBuilder {
- public:
-  explicit PersonBuilder(std::string name) : name_(std::move(name)) {}
+  Person product_;
 
-  void SetAge(int age) { age_ = age; }
-  void SetEmail(std::string email) { email_ = std::move(email); }
-
-  Person Build() const {
+public:
+  [[nodiscard]] Person Build() const {
     // Validate once, here, before any Person can exist.
-    if (name_.empty()) throw std::invalid_argument("name is required");
-    if (age_ < 0) throw std::invalid_argument("age cannot be negative");
-    return Person{name_, age_, email_};
+    // if (name_.empty()) throw std::invalid_argument("name is required");
+    if (product_.age_ < 0) throw std::invalid_argument("age cannot be negative");
+    return product_;
   }
 
- private:
-  std::string name_;
-  int age_ = 0;
-  std::string email_;
+  void WithAge(int age) { product_.age_ = age; }
+  void WithName(const std::string_view name) { product_.name_ = name; }
+  void WithEmail(const std::string_view email) { product_.email_ = email; }
+  void WithPremium(bool premium) { product_.premium_ = premium; }
+
 };
 
 int main() {
-  PersonBuilder builder{"Ana"};
-  builder.SetAge(30);
-  builder.SetEmail("ana@example.com");
+  PersonBuilder builder;
+  builder.WithAge(30);
   Person ana = builder.Build();
   ana.Print();
 
   try {
-    PersonBuilder bad{"Bo"};
-    bad.SetAge(-1);
+    PersonBuilder bad;
+    bad.WithAge(-1);
     Person bo = bad.Build();  // throws: an invalid state never becomes a Person
     bo.Print();
   } catch (const std::exception& e) {
