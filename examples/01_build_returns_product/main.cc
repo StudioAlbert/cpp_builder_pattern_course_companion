@@ -11,6 +11,7 @@
 
 class Person {
   friend class PersonBuilder;
+
  public:
   void Print() const {
     std::cout << name_ << " (" << age_ << ") <" << email_ << ">\n";
@@ -21,6 +22,7 @@ class Person {
   int age_ = 0;            // defaults make every optional field truly optional
   std::string email_;
   bool premium_ = false;
+
 };
 
 class PersonBuilder {
@@ -42,7 +44,12 @@ public:
 };
 
 int main() {
+
+  Person Tom;
+  Tom.Print();
+
   PersonBuilder builder;
+  builder.WithName("Ana");
   builder.WithAge(30);
   Person ana = builder.Build();
   ana.Print();

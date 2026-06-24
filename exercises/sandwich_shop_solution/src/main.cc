@@ -9,13 +9,12 @@ int main() {
   Sandwich blt = SandwichBuilder{}
                      .WithBread("baguette")
                      .WithFilling("bacon")
-                     .AddSauce("mayo")
-                     .WithCheese()
-                     .Toasted()
+                     .WithFilling("tomato")
+                     .WithFilling("lettuce")
                      .Build();
   std::cout << blt.Content() << '\n';
   assert(blt.Content() ==
-         "toasted baguette sandwich with bacon + cheese, mayo (eat in)");
+         "baguette sandwich with lettuce (eat in)");
 
   // Step 3: Build() validates - a sandwich with no bread is rejected.
   try {

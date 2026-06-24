@@ -77,9 +77,8 @@ class SandwichBuilder {
     return SandwichBuilder{}
         .WithBread("baguette")
         .WithFilling("bacon")
-        .AddSauce("mayo")
-        .WithCheese()
-        .Toasted()
+        .WithFilling("tomato")
+        .WithFilling("lettuce")
         .Build();
   }
   static Sandwich Vegan() {

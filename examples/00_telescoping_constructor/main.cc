@@ -35,13 +35,18 @@ class Person {
               << (premium_ ? " [premium]" : "")
               << (newsletter_ ? " [newsletter]" : "") << '\n';
   }
-
- private:
   std::string name_;
   int age_;
+ private:
+
   std::string email_;
   bool premium_;
   bool newsletter_;
+};
+
+struct Person2 {
+    std::string name_;
+    int age_;
 };
 
 int main() {
@@ -54,6 +59,8 @@ int main() {
   // The two trailing bools are SWAPPED here (premium/newsletter). It still
   // compiles. That silent error is the bug class the Builder removes.
   Person c{"Cy", 40, "cy@example.com", false, true};
+
+    Person2 d{ .name_ = "C", .age_ = 30};
 
   a.Print();
   b.Print();
